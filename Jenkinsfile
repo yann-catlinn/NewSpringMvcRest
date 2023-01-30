@@ -18,11 +18,11 @@ pipeline {
         }
      }
     post {
-       always {
-          junit(
+    always {
+      junit(
         allowEmptyResults: true,
-        testResults: '*/test-reports/.xml'
+        testResults: '**/test-reports/*.xml'
       )
-      }
-   } 
+    }
+    }
 }
