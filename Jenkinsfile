@@ -1,6 +1,12 @@
 pipeline {
     agent any
    
+    
+     if (isUnix()) --> sh "command"
+
+     else --> bat "command"
+    
+    
     stages {
         stage('Initialize'){
             steps{
