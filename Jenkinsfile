@@ -10,7 +10,6 @@ pipeline {
         }
         stage('Build') {
             steps {
-                dir("/var/lib/jenkins/workspace/New_demo/") {
                 sh 'mvn -B -DskipTests clean package'
                 }
             
