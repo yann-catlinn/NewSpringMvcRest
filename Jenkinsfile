@@ -1,26 +1,24 @@
-pipeline {
-    agent any
-    
+pipeline { 
+    agent any 
+    options {
+        skipStagesAfterUnstable()
+    }
     stages {
-        stage('Initialize'){
-            steps{
-                echo "PATH = ${MAVEN_HOME}/bin:${PATH}"
-                echo "MAVEN_HOME = /opt/maven"
+        stage('Build') { 
+            steps { 
+                sh 'make' 
             }
         }
-        stage('Build') {
+        stage('Test'){
             steps {
-                sh 'mvn -B -DskipTests clean package'           
+                sh 'make check'
+                junit 'reports/**/*.xml' 
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make publish'
             }
         }
     }
-    post {
-    always {
-      junit(
-        allowEmptyResults: true,
-        testResults: '**/test-reports/*.xml'
-      )
-    }
-    }
-   
 }
