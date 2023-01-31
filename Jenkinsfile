@@ -4,25 +4,14 @@ pipeline {
        stages {
         stage('Initialize'){
             steps{
-                echo "PATH = ${MAVEN_HOME}/bin:${PATH}"
-                echo "M2_HOME = /opt/maven"
+                echo "Esta es el inicio"
             }
         }
         stage('Build') {
             steps {
-                dir("/workspace/MAVEN pipeline/") {
-                sh 'mvn -B -DskipTests clean package'
-                }
+                echo "Esta es la construcción"
             
             }
         }
-     }
-    post {
-       always {
-          junit(
-        allowEmptyResults: true,
-        testResults: '*/test-reports/.xml'
-      )
-      }
-   } 
+     } 
 }
