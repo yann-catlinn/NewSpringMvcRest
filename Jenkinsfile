@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo "Esta es la construcción"
+                sh 'mvn -B package'
             
             }
         }
