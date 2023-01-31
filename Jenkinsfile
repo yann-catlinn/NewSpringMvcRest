@@ -13,6 +13,15 @@ pipeline {
             }
         }
             
+        stage('Test') {
+            steps {
+                 junit(allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
+      )
+            
+            }
+        }
+       
+            
         stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
