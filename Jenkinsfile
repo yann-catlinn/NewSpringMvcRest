@@ -15,8 +15,7 @@ pipeline {
             
         stage('Test') {
             steps {
-                 junit(allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
-      )
+                 sh "mvn clean verify" 
             
             }
         }
@@ -54,6 +53,15 @@ pipeline {
             }
         
             } 
-     } 
+     }
+    
+    post {
+       always {
+          junit(
+        allowEmptyResults: true,
+        testResults: '*/test-reports/.xml'
+      )
+      }
+   } 
 }
 
