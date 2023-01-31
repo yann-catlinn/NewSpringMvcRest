@@ -33,13 +33,9 @@ pipeline {
                             credentialsId: "NexusCredentials",
                             artifacts: [
                                 [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: artifactPath,
-                                type: pom.packaging],
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: "pom.xml",
-                                type: "pom"]
+                                        classifier: '',
+                                        file: 'ROOT.war',
+                                        type: pom.packaging]
                             ]
                         );
                     } else {
