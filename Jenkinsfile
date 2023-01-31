@@ -23,7 +23,7 @@ pipeline {
                     if(artifactExists) {
                         echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
                         nexusArtifactUploader(
-                            nexusVersion: "nexus3,
+                            nexusVersion: "nexus3",
                             protocol: "http",
                             nexusUrl: "localhost:8081/",
                             groupId: pom.groupId,
