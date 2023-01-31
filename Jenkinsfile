@@ -1,26 +1,28 @@
-pipeline { 
-     agent any
-   
-    stages {
-        stage('Build') { 
+pipeline {
+    agent any
+
+       stages {
+        stage('Initialize'){
+            steps{
+                echo "PATH = ${MAVEN_HOME}/bin:${PATH}"
+                echo "M2_HOME = /opt/maven"
+            }
+        }
+        stage('Build') {
             steps {
-                dir("/workspace/MAVEN pipeline/my-app/") {
+                dir("/workspace/MAVEN pipeline/") {
                 sh 'mvn -B -DskipTests clean package'
                 }
-        }
-        stage('Test'){
-            steps {
-                echo "$PATH" 
-                sh 'make check'
-                junit 'reports/**/*.xml' 
+            
             }
         }
-        stage('Deploy') {
-            steps {
-                 echo "$PATH"
-                sh 'make publish'
-            }
-        }
-    }
-     
+     }
+    post {
+       always {
+          junit(
+        allowEmptyResults: true,
+        testResults: '*/test-reports/.xml'
+      )
+      }
+   } 
 }
