@@ -11,6 +11,7 @@ pipeline {
                 sh 'mvn -B package'
             
             }
+        }
             
         stage("Publish to Nexus Repository Manager") {
             steps {
