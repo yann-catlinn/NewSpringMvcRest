@@ -3,10 +3,10 @@ pipeline {
    
     stages {
         stage('Build') { 
-            steps { 
-                echo "$PATH" 
-                sh 'make' 
-            }
+            steps {
+                dir("/workspace/MAVEN pipeline/my-app/") {
+                sh 'mvn -B -DskipTests clean package'
+                }
         }
         stage('Test'){
             steps {
