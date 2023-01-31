@@ -34,7 +34,7 @@ pipeline {
                             artifacts: [
                                 [artifactId: pom.artifactId,
                                         classifier: '',
-                                        file: 'ROOT.war',
+                                        file: artifactPath,
                                         type: pom.packaging]
                             ]
                         );
