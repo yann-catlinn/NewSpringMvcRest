@@ -37,7 +37,7 @@ pipeline {
                             nexusUrl: "localhost:8081",
                             groupId: pom.groupId,
                             version: pom.version,
-                            repository: "Repositorio1",
+                            repository: "Repositorio2",
                             credentialsId: "NexusCredentials",
                             artifacts: [
                                 [artifactId: pom.artifactId,
