@@ -1,14 +1,6 @@
 pipeline {
     agent any
-    environment {
-        NEXUS_VERSION = "nexus3"
-        NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "localhost:8081/"
-        NEXUS_REPOSITORY = "Repositorio1"
-        NEXUS_CREDENTIAL_ID = "NexusCredentials"
-    }
-
-       stages {
+        stages {
         stage('Initialize'){
             steps{
                 echo "Esta es el inicio"
@@ -31,13 +23,13 @@ pipeline {
                     if(artifactExists) {
                         echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
                         nexusArtifactUploader(
-                            nexusVersion: NEXUS_VERSION,
-                            protocol: NEXUS_PROTOCOL,
-                            nexusUrl: NEXUS_URL,
+                            nexusVersion: "nexus3,
+                            protocol: "http",
+                            nexusUrl: "localhost:8081/",
                             groupId: pom.groupId,
                             version: pom.version,
-                            repository: NEXUS_REPOSITORY,
-                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            repository: "Repositorio1",
+                            credentialsId: "NexusCredentials",
                             artifacts: [
                                 [artifactId: pom.artifactId,
                                 classifier: '',
