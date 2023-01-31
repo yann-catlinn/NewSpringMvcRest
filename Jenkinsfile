@@ -13,5 +13,30 @@ pipeline {
             
             }
         }
+        stage ('nexus') {
+                steps {
+                    script {
+                            //pipeline-utility-steps
+                       
+                            def   pom = readMavenPom file: "pom.xml";
+                                nexusArtifactUploader(
+                                    nexusVersion: 'nexus3',
+                                    protocol: 'http',
+                                    nexusUrl: 'localhost:8081/repository/Repositorio1',
+                                    groupId: pom.groupId,
+                                    version: pom.version,
+                                    repository: 'Repositorio1',
+                                    credentialsId: 'NexusCredentials',
+                                    artifacts: [
+                                        [artifactId: pom.artifactId,
+                                        classifier: '',
+                                        file: 'ROOT.war',
+                                        type: pom.packaging]
+                                    ]
+                                )
+                            
+                        }   
+                }
+            } 
      } 
 }
