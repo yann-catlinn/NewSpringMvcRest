@@ -1,44 +1,46 @@
+def generateStageReport(stageName, stageResult) {
+  def status
+  if (stageResult == 'SUCCESS') {
+    status = ":white_check_mark: SUCCESS"
+  } else {
+    status = ":x: FAILURE"
+  }
+
+  return "* ${stageName}: ${status}"
+}
+
 pipeline {
-    agent any
-        stages {
-         
-        stage('Test') {
-            steps {
-                 sh "mvn clean package" 
-            
-            }
-        } 
-        stage("Publish to Nexus Repository Manager") {
-            steps {
-                script {
-                    pom = readMavenPom file: "pom.xml";
-                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-                    artifactPath = filesByGlob[0].path;
-                    artifactExists = fileExists artifactPath;
-                    if(artifactExists) {
-                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
-                        nexusArtifactUploader(
-                            nexusVersion: "nexus3",
-                            protocol: "http",
-                            nexusUrl: "192.168.1.10:8081",
-                            groupId: pom.groupId,
-                            version: pom.version,
-                            repository: "EjemploRepo",
-                            credentialsId: "NexusCredentials",
-                            artifacts: [
-                                [artifactId: pom.artifactId,
-                                        classifier: '',
-                                        file: artifactPath,
-                                        type: pom.packaging]
-                            ]
-                        );
-                    } else {
-                        error "*** File: ${artifactPath}, could not be found";
-                    }
-                }
-            }
-        
-            } 
-     }
+  agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'npm test'
+      }
+    }
+  }
+
+  post {
+    always {
+      script {
+        def results = []
+        for (stage in currentBuild.rawBuild.getExecution().getStageNodes()) {
+          def stageName = stage.getDisplayName()
+          def stageResult = stage.getStatus().toString()
+          results.add(generateStageReport(stageName, stageResult))
+        }
+
+        def summary = "Pipeline summary:\n"
+        summary += results.join("\n")
+        slackSend channel: '#mychannel', message: summary, tokenCredentialId: 'slack-token'
+      }
+    }
+  }
 }
