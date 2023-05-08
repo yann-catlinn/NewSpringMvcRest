@@ -13,16 +13,15 @@ pipeline {
   agent any
 
   stages {
-    stage('Build') {
+    stage('Clean') {
       steps {
-        sh 'npm install'
-        sh 'npm run build'
+        sh 'mvn clean'
       }
     }
 
-    stage('Test') {
+    stage('Install') {
       steps {
-        sh 'npm test'
+        sh 'mvn install'
       }
     }
   }
@@ -39,7 +38,7 @@ pipeline {
 
         def summary = "Pipeline summary:\n"
         summary += results.join("\n")
-        slackSend channel: '#mychannel', message: summary, tokenCredentialId: 'slack-token'
+        slackSend channel: '#fundamentos-de-devops', message: summary, tokenCredentialId: 'SecretSlack'
       }
     }
   }
