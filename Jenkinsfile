@@ -1,4 +1,5 @@
-@Grab('org.jenkins-ci.plugins.workflow:workflow-api:2.45')
+def flowNodesClass = Jenkins.instance.pluginManager.uberClassLoader.loadClass('org.jenkinsci.plugins.workflow.graph.FlowNodes')
+
 
 def generateStageReport(stageName, stageResult) {
   def status
