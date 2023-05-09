@@ -1,4 +1,4 @@
-import org.jenkinsci.plugins.workflow.graph.FlowNodes
+@Grab('org.jenkins-ci.plugins.workflow:workflow-api:2.45')
 
 def generateStageReport(stageName, stageResult) {
   def status
@@ -21,7 +21,7 @@ pipeline {
       }
     }
 
-    stage('Install') {
+    stage('Build') {
       steps {
         sh 'mvn install'
       }
