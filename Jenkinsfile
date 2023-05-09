@@ -1,3 +1,5 @@
+import org.jenkinsci.plugins.workflow.graph.FlowNodes
+
 def generateStageReport(stageName, stageResult) {
   def status
   if (stageResult == 'SUCCESS') {
