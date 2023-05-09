@@ -1,42 +1,43 @@
 pipeline {
-  agent any
+agent any
 
-  stages {
-    stage('Clean') {
-      steps {
-        sh 'mvn clean'
-      }
-    }
+stages {
+stage('Build') {
+steps {
+sh 'npm install'
+sh 'npm run build'
+script {
+if (currentBuild.result == 'SUCCESS') {
+env.BUILD_STAGE1_STATUS = 'SUCCESS'
+} else {
+env.BUILD_STAGE1_STATUS = 'FAILURE'
+}
+}
+}
+}
 
-    stage('Build') {
-      steps {
-        sh 'mvn install'
-      }
-    }
-  }
+stage('Test') {
+steps {
+sh 'npm test'
+script {
+if (currentBuild.result == 'SUCCESS') {
+env.BUILD_STAGE2_STATUS = 'SUCCESS'
+} else {
+env.BUILD_STAGE2_STATUS = 'FAILURE'
+}
+}
+}
+}
+}
 
-  post {
-    always {
-      script {
-        def results = [:]
-
-        currentBuild.rawBuild.getBuild().getLog(1000).each { line ->
-          if (line.contains("[Pipeline] stage")) {
-            currentStage = line.substring(line.indexOf("stage ") + 6, line.length() - 2)
-          }
-          if (line.contains("SUCCESS") || line.contains("FAILURE")) {
-            results[currentStage] = line
-          }
-        }
-
-        def summary = "Pipeline summary:\n"
-        results.each { stageName, stageResult ->
-          def status = stageResult.contains("SUCCESS") ? ":white_check_mark: SUCCESS" : ":x: FAILURE"
-          summary += "* ${stageName}: ${status}\n"
-        }
-
-        slackSend channel: '#fundamentos-de-devops', message: summary, tokenCredentialId: 'SecretSlack'
-      }
-    }
-  }
+post {
+always {
+script {
+def summary = "Pipeline summary:\n"
+summary += "Build stage: ${env.BUILD_STAGE1_STATUS}\n"
+summary += "Test stage: ${env.BUILD_STAGE2_STATUS}\n"
+slackSend channel: '#fundamentos-de-devops', message: summary, tokenCredentialId: 'SecretSlack'
+}
+}
+}
 }
