@@ -2,10 +2,9 @@ pipeline {
 agent any
 
 stages {
-stage('Build') {
+stage('Clean') {
 steps {
-sh 'npm install'
-sh 'npm run build'
+sh 'mvn clean'
 script {
 if (currentBuild.result == 'SUCCESS') {
 env.BUILD_STAGE1_STATUS = 'SUCCESS'
@@ -16,9 +15,9 @@ env.BUILD_STAGE1_STATUS = 'FAILURE'
 }
 }
 
-stage('Test') {
+stage('Install') {
 steps {
-sh 'npm test'
+sh 'mvn install'
 script {
 if (currentBuild.result == 'SUCCESS') {
 env.BUILD_STAGE2_STATUS = 'SUCCESS'
