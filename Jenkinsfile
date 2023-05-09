@@ -30,9 +30,9 @@ pipeline {
     always {
       script {
         def results = []
-        for (run in currentBuild.runs) {
-          def stageName = run.parent.name
-          def stageResult = run.result.toString()
+        for (stage in currentBuild.getBuildCauses()[0].getStages()) {
+          def stageName = stage.getName()
+          def stageResult = stage.getStatus().toString()
           results.add(generateStageReport(stageName, stageResult))
         }
 
@@ -43,3 +43,4 @@ pipeline {
     }
   }
 }
+
