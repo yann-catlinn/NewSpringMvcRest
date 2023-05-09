@@ -1,3 +1,4 @@
+library identifier: 'genric.groovy@master', retriever:          modernSCM([$class: 'GitSCMSource', credentialsId: '', remote: 'https://github.com/mani1soni/jenkins-practice.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait']]])
 def generateStageReport(stageName, stageResult) {
   def status
   if (stageResult == 'SUCCESS') {
