@@ -1,6 +1,3 @@
-def flowNodesClass = Jenkins.instance.pluginManager.uberClassLoader.loadClass('org.jenkinsci.plugins.workflow.graph.FlowNodes')
-
-
 def generateStageReport(stageName, stageResult) {
   def status
   if (stageResult == 'SUCCESS') {
@@ -33,9 +30,9 @@ pipeline {
     always {
       script {
         def results = []
-        for (node in FlowNodes.getNodeList(currentBuild.rawBuild, true)) {
-          def stageName = node.getDisplayName()
-          def stageResult = node.getStatus().toString()
+        for (run in currentBuild.runs) {
+          def stageName = run.parent.name
+          def stageResult = run.result.toString()
           results.add(generateStageReport(stageName, stageResult))
         }
 
