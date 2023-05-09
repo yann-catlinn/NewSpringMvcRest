@@ -13,15 +13,16 @@ pipeline {
   agent any
 
   stages {
-    stage('Clean') {
+    stage('Build') {
       steps {
-        sh 'mvn clean'
+        sh 'npm install'
+        sh 'npm run build'
       }
     }
 
-    stage('Install') {
+    stage('Test') {
       steps {
-        sh 'mvn install'
+        sh 'npm test'
       }
     }
   }
@@ -30,7 +31,7 @@ pipeline {
     always {
       script {
         def results = []
-        for (stage in currentBuild.rawBuild.getExecution().getStageNodes()) {
+        for (stage in currentBuild.getStageFlowNodes()) {
           def stageName = stage.getDisplayName()
           def stageResult = stage.getStatus().toString()
           results.add(generateStageReport(stageName, stageResult))
