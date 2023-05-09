@@ -1,4 +1,3 @@
-library identifier: 'genric.groovy@master', retriever:          modernSCM([$class: 'GitSCMSource', credentialsId: '', remote: 'https://github.com/mani1soni/jenkins-practice.git', traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait']]])
 def generateStageReport(stageName, stageResult) {
   def status
   if (stageResult == 'SUCCESS') {
@@ -14,15 +13,16 @@ pipeline {
   agent any
 
   stages {
-    stage('Clean') {
+    stage('Build') {
       steps {
-        sh 'mvn clean'
+        sh 'npm install'
+        sh 'npm run build'
       }
     }
 
-    stage('Install') {
+    stage('Test') {
       steps {
-        sh 'mvn install'
+        sh 'npm test'
       }
     }
   }
@@ -31,9 +31,9 @@ pipeline {
     always {
       script {
         def results = []
-        for (stage in currentBuild.getStageFlowNodes()) {
-          def stageName = stage.getDisplayName()
-          def stageResult = stage.getStatus().toString()
+        for (node in FlowNodes.getNodeList(currentBuild.rawBuild, true)) {
+          def stageName = node.getDisplayName()
+          def stageResult = node.getStatus().toString()
           results.add(generateStageReport(stageName, stageResult))
         }
 
