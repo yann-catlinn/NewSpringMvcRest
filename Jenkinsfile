@@ -13,16 +13,15 @@ pipeline {
   agent any
 
   stages {
-    stage('Build') {
+    stage('Clean') {
       steps {
-        sh 'npm install'
-        sh 'npm run build'
+        sh 'mvn clean'
       }
     }
 
-    stage('Test') {
+    stage('Install') {
       steps {
-        sh 'npm test'
+        sh 'mvn install'
       }
     }
   }
