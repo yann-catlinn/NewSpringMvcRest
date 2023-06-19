@@ -35,7 +35,7 @@ script {
 def summary = "Pipeline summary:\n"
 summary += "Build stage: ${env.BUILD_STAGE1_STATUS}\n"
 summary += "Test stage: ${env.BUILD_STAGE2_STATUS}\n"
-slackSend channel: '#fundamentos-de-devops2234', message: summary, tokenCredentialId: 'SecretSlack'
+slackSend channel: '#fundamentos-de-devops', message: summary, tokenCredentialId: 'SecretSlack'
 }
 }
 }
